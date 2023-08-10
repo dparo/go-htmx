@@ -8,6 +8,7 @@ import (
 	"html/template"
 	"io/fs"
 	"log"
+	"fmt"
 
 	"github.com/gorilla/mux"
 )
@@ -97,5 +98,10 @@ func main() {
 		http.FileServer(http.FS(ctx.staticFs)),
 	)
 
-	http.ListenAndServe(":8080", m)
+	port := 8080
+	log.Printf("Starting server at port %d\n", port)
+	err = http.ListenAndServe(fmt.Sprintf(":%d", port), m)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
