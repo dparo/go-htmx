@@ -3,10 +3,10 @@ package main
 import "net/http"
 
 func index_route(w http.ResponseWriter, r *http.Request) {
-	t := templates["templates/index.xhtml"]
+	w.Header().Set("HX-Trigger", "evProcListRefresh")
 
-	m := map[string]string{"Name": "foobar"}
-
-	w.Header().Add("HX-Trigger", "evProcListRefresh")
-	t.Execute(w, m)
+	params := map[string]interface{}{
+		"Name": "Davide",
+	}
+	ExecuteTemplate("index.xhtml", w, params)
 }
