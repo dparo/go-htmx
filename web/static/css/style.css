@@ -550,6 +550,10 @@ video {
   display: block;
 }
 
+.inline-block {
+  display: inline-block;
+}
+
 .flex {
   display: flex;
 }
@@ -584,6 +588,14 @@ video {
 
 .resize {
   resize: both;
+}
+
+.list-disc {
+  list-style-type: disc;
+}
+
+.break-all {
+  word-break: break-all;
 }
 
 .rounded {

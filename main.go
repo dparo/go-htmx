@@ -35,7 +35,7 @@ func InitServerCtx() error {
 
 	tmpl := template.New("")
 
-	fs.WalkDir(embedFs, TEMPLATES_DIR, func(path string, root fs.DirEntry, err error) error {
+	err = fs.WalkDir(embedFs, TEMPLATES_DIR, func(path string, root fs.DirEntry, err error) error {
 		if root.IsDir() {
 			return nil
 		}
@@ -55,23 +55,30 @@ func InitServerCtx() error {
 		_, err = t.Parse(string(b))
 
 		if err != nil {
-			return nil
+			return err
 		}
 
 		return nil
 	})
 
+	if err != nil {
+		return err
+	}
+
 	ctx.template = tmpl
 
 	log.Printf("%s\n", tmpl.DefinedTemplates())
-
 	return nil
 }
 
 // NOTE(d.paro): Thread safety
 //   - template.{Execute, ExcuteTemplate}() is thread safe
 func ExecuteTemplate(key string, w http.ResponseWriter, params map[string]interface{}) error {
-	return ctx.template.ExecuteTemplate(w, key, params)
+	err := ctx.template.ExecuteTemplate(w, key, params)
+	if err != nil {
+		log.Println(err)
+	}
+	return err
 }
 
 func main() {

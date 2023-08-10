@@ -8,5 +8,5 @@ func index_route(w http.ResponseWriter, r *http.Request) {
 	params := map[string]interface{}{
 		"Name": "Davide",
 	}
-	ExecuteTemplate("index.xhtml", w, params)
+	ExecuteTemplate("index.gohtml", w, params)
 }
