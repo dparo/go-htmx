@@ -25,8 +25,8 @@
     </div>
     <h2 class="dark:text-white font-bold pt-10 pb-5">Command runner</h2>
     {{ template "command_runner.gohtml" }}
-    <h2 class="dark:text-white font-bold pt-10">List of running processes</h2>
-    {{ template "proc_list.gohtml" }}
+    <h2 class="dark:text-white font-bold pt-10 pb-5">List of running processes</h2>
+    {{ template "proc_list.gohtml" . }}
 </body>
 
 </html>

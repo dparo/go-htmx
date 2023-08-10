@@ -1,12 +1,12 @@
 {{ $cmds := .Cmds }}
 {{ $signals := .Signals }}
 
-<ul class="list-disc" hx-get="/procs" hx-trigger="evProcListRefresh from:body" hx-swap="outerHTML">
+<ul class="list-disc dark:text-white" hx-get="/procs" hx-trigger="evProcListRefresh from:body" hx-swap="outerHTML">
     {{ range $cmd := .Cmds }}
-        <li id="li-{{ $cmd.Pid }}">
+        <li id="li-{{ $cmd.Pid }}" class="py-1">
             {{ range $signal := $signals }}
             <button hx-delete="/api/pid/{{ $cmd.Pid }}?signal={{ $signal }}" hx-swap="outerHTML" hx-target="closest li"
-                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">{{ $signal }}</button>
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded mx-1">{{ $signal }}</button>
             {{ end }}
             <p class="inline-block break-all">
             {{ $cmd.Pid }} - {{ $cmd.Argv }}
