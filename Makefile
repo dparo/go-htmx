@@ -1,7 +1,8 @@
 .DEFAULT_GOAL := all
-.PHONY: all release clean
+.PHONY: all release clean tailwind run run-detached
 
-all: tailwind
+all:
+	go build
 
 
 install-deps:
@@ -10,10 +11,19 @@ install-deps:
 tailwind:
 	tailwindcss -i ./templates/input.css -o ./static/css/style.css
 
-run:
-	go build
+run: all
 	./go-htmx
 
-serve:
+run-detached: all
+	killall go-htmx || true
+	./go-htmx &
+
+
+serve: serve-watchman
+
+serve-entr:
 	find ./ static templates -not -path "./.git/*" -type f | entr -r make run
 	# air
+
+serve-watchman:
+	watchman-make -p '**/*.go' 'static/**' 'templates/**' '**.js' -t run-detached
