@@ -1,9 +1,8 @@
 .DEFAULT_GOAL := all
 .PHONY: all release clean tailwind run run-detached
 
-all:
+all: tailwind
 	go build
-
 
 install-deps:
 	go install github.com/cosmtrek/air@latest
@@ -11,19 +10,21 @@ install-deps:
 tailwind:
 	tailwindcss -i ./templates/input.css -o ./static/css/style.css
 
-run: all
+serve: all
 	./go-htmx
 
-run-detached: all
+serve-detached: all
 	killall go-htmx || true
 	./go-htmx &
 
 
-serve: serve-watchman
+watch: watch-watchman
 
-serve-entr:
-	find ./ static templates -not -path "./.git/*" -type f | entr -r make run
-	# air
+watch-air:
+	air
 
-serve-watchman:
-	watchman-make -p 'Makefile' '**/*.go' 'static/**' 'templates/**' '**.js' -t run-detached
+watch-entr:
+	find ./ static templates -not -path "./.git/*" -type f | entr -r make serve
+
+watch-watchman:
+	watchman-make -p 'Makefile' '**/*.go' 'static/**' 'templates/**' '**.js' -t serve-detached

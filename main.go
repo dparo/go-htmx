@@ -13,8 +13,8 @@ import (
 )
 
 type ServerContext struct {
-	staticFs  fs.FS
-	templates map[string]*template.Template
+	staticFs fs.FS
+	template *template.Template
 }
 
 const (
@@ -24,10 +24,7 @@ const (
 
 //go:embed templates/* static/*
 var embedFs embed.FS
-var ctx = ServerContext{
-	nil,
-	map[string]*template.Template{},
-}
+var ctx = ServerContext{nil, nil}
 
 func InitServerCtx() error {
 	staticContentSub, err := fs.Sub(embedFs, STATIC_DIR)
@@ -36,27 +33,45 @@ func InitServerCtx() error {
 	}
 	ctx.staticFs = staticContentSub
 
-	return fs.WalkDir(embedFs, TEMPLATES_DIR, func(path string, tmpl fs.DirEntry, err error) error {
-		if tmpl.IsDir() {
+	tmpl := template.New("")
+
+	fs.WalkDir(embedFs, TEMPLATES_DIR, func(path string, root fs.DirEntry, err error) error {
+		if root.IsDir() {
 			return nil
 		}
 		log.Printf("Parsing template at filepath %s", path)
-		pt, err := template.ParseFS(embedFs, path)
+		b, err := fs.ReadFile(embedFs, path)
 		if err != nil {
-			return err
+			return nil
 		}
 
-		ctx.templates[path] = pt
+		relpath, err := filepath.Rel(TEMPLATES_DIR, path)
+		if err != nil {
+			return nil
+		}
+
+		// _, err = tmpl.ParseFS(embedFs, path)
+		t := tmpl.New(relpath)
+		_, err = t.Parse(string(b))
+
+		if err != nil {
+			return nil
+		}
+
 		return nil
 	})
+
+	ctx.template = tmpl
+
+	log.Printf("%s\n", tmpl.DefinedTemplates())
+
+	return nil
 }
 
 // NOTE(d.paro): Thread safety
-//   - ctx.templates[key] is thread safe access.
-//   - template.Execute() is thread safe
+//   - template.{Execute, ExcuteTemplate}() is thread safe
 func ExecuteTemplate(key string, w http.ResponseWriter, params map[string]interface{}) error {
-	t := ctx.templates[filepath.Join(TEMPLATES_DIR, key)]
-	return t.Execute(w, params)
+	return ctx.template.ExecuteTemplate(w, key, params)
 }
 
 func main() {
@@ -74,7 +89,6 @@ func main() {
 	m.PathPrefix("/").Handler(
 		http.FileServer(http.FS(ctx.staticFs)),
 	)
-
 
 	http.ListenAndServe(":8080", m)
 }
