@@ -26,4 +26,4 @@ serve-entr:
 	# air
 
 serve-watchman:
-	watchman-make -p '**/*.go' 'static/**' 'templates/**' '**.js' -t run-detached
+	watchman-make -p 'Makefile' '**/*.go' 'static/**' 'templates/**' '**.js' -t run-detached
