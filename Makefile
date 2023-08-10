@@ -8,7 +8,7 @@ install-deps:
 	go install github.com/cosmtrek/air@latest
 
 tailwind:
-	tailwindcss -i ./templates/input.css -o ./static/css/style.css
+	tailwindcss -i ./web/templates/input.css -o ./web/static/css/style.css
 
 serve: all
 	./go-htmx
@@ -27,4 +27,4 @@ watch-entr:
 	find ./ static templates -not -path "./.git/*" -type f | entr -r make serve
 
 watch-watchman:
-	watchman-make -p 'Makefile' '**/*.go' 'static/**' 'templates/**' '**.js' -t serve-detached
+	watchman-make -p 'Makefile' '**/*.go' 'web/**/*' '*.js' '*.json' -t serve-detached

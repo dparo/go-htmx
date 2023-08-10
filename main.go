@@ -18,11 +18,11 @@ type ServerContext struct {
 }
 
 const (
-	TEMPLATES_DIR = "templates"
-	STATIC_DIR    = "static"
+	TEMPLATES_DIR = "web/templates"
+	STATIC_DIR    = "web/static"
 )
 
-//go:embed templates/* static/*
+//go:embed web/templates/* web/static/*
 var embedFs embed.FS
 var ctx = ServerContext{nil, nil}
 
