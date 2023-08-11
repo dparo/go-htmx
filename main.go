@@ -74,8 +74,8 @@ func InitServerCtx() error {
 
 // NOTE(d.paro): Thread safety
 //   - template.{Execute, ExcuteTemplate}() is thread safe
-func ExecuteTemplate(key string, w http.ResponseWriter, params map[string]interface{}) error {
-	err := ctx.template.ExecuteTemplate(w, key, params)
+func ExecuteTemplate(key string, w http.ResponseWriter, data any) error {
+	err := ctx.template.ExecuteTemplate(w, key, data)
 	if err != nil {
 		log.Println(err)
 	}
