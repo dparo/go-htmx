@@ -1,5 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" class="dark">
+<html
+    xmlns="http://www.w3.org/1999/xhtml"
+    class="dark"
+    hx-headers="js:{X-Request-ID: crypto.randomUUID()}">
 
 <head>
     <title>GoHtmx</title>
@@ -18,7 +21,7 @@
         </script>
 </head>
 
-<body class="p-20 dark:bg-slate-800">
+<body class="p-20 dark:bg-slate-800" >
     <div style="display: flex">
         <h1 class="dark:text-white text-3xl font-bold">GoHtmx</h1>
         <img style="align-self: center; padding-left:8px" src="/favicon-32x32.png" alt="logo"></img>
