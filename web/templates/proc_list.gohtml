@@ -3,7 +3,7 @@
 
 <ul class="list-disc" hx-get="/procs" hx-trigger="evProcListRefresh from:body" hx-swap="outerHTML">
     {{ range $cmd := .Cmds }}
-        <li class="py-1">
+        <li class="py-1" x-data="{ pid: {{ $cmd.Pid }} }" hx-target="this">
 
             <div
                 class="relative"
@@ -27,7 +27,7 @@
                     x-ref="button"
                     x-bind:aria-expanded="open"
                     x-bind:aria-controls="$id('dropdown-button')"
-                    @click="toggle()"
+                    x-on:click="toggle(); console.log(pid);"
                     >
                     <span class="">TERMINATE</span>
                     <span aria-hidden="true">&darr;</span>
@@ -40,7 +40,7 @@
                     x-ref="panel"
                     x-show="open"
                     x-cloak
-                    @click.outside="close($refs.button)"
+                    x-on:click.outside="close($refs.button)"
                     >
                     {{ range $index, $signal := $signals }}
                         <a
@@ -49,7 +49,7 @@
                             hx-delete="/api/pid/{{ $cmd.Pid }}?signal={{ $signal }}"
                             hx-swap="outerHTML"
                             hx-target="closest li"
-                            @click="close()"
+                            x-on:click="close()"
                             >
                             {{ $signal }}
                         </a>
