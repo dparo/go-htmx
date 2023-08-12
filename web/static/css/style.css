@@ -596,6 +596,12 @@ video {
   --tw-ring-opacity: 0.75;
 }
 
+.btn[disabled] {
+  background-color: dimgrey;
+  color: linen;
+  opacity: 1;
+}
+
 .visible {
   visibility: visible;
 }

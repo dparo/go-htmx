@@ -14,11 +14,19 @@
             aria-label="Recipient's username"
             aria-describedby="button-addon2"
             hx-trigger="keydown[key == 'Enter']"
-            hx-swap="innerHTML" hx-target="#processCreatedMsg" hx-post="/api/cmd" hx-vals='js:{cmd: document.getElementById("cmdTextArea").value}'
+            hx-swap="innerHTML" hx-target="next div" hx-post="/api/cmd" hx-vals='js:{cmd: document.getElementById("cmdTextArea").value}'
         >
         <button class="btn" type="button"
+            x-data="{enabled: true}"
             hx-trigger="click"
-            hx-swap="innerHTML" hx-target="#processCreatedMsg" hx-post="/api/cmd" hx-vals='js:{cmd: document.getElementById("cmdTextArea").value}'>
+            hx-swap="innerHTML"
+            hx-target="next div"
+            hx-post="/api/cmd"
+            hx-vals='js:{cmd: document.getElementById("cmdTextArea").value}'
+            x-on:click='enabled = false'
+            x-bind:disabled="enabled ? false : true"
+            x-on:htmx:after-request="enabled = true"
+            >
             RUN
         </button>
     </div>

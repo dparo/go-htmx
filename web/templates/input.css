@@ -15,4 +15,10 @@
     .btn {
         @apply btn-primary;
     }
+
+    .btn[disabled] {
+        background-color: dimgrey;
+        color: linen;
+        opacity: 1;
+    }
 }
