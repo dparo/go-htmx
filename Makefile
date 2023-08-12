@@ -24,12 +24,10 @@ watch-air:
 	air
 
 watch-entr:
-	cat Makefile | entr -r make watch-entr-impl
+	while true; do find . -type f \
+			-name "Makefile" -o -name "*.go" -o -name "*.js" -o -name "*.css" -o -name "*.gohtml" -o -name "*.html" \
+			! -path "./.git/*" ! -path "./web/static/css/style.css" | entr -r -d make serve; sleep 0.5; done
 
-watch-entr-impl:
-	while sleep 1; do find . -type f \
-		-name "*.go" -o -name "*.js" -o -name "*.css" -o -name "*.gohtml" -o -name "*.html" \
-		! -path "./.git/*" ! -path "./web/static/css/style.css" | entr -r -d make serve; done
 
 watch-watchman:
 	watchman-make -p 'Makefile' '**/*.go' 'web/**/*' '*.js' '*.json' -t serve-detached
