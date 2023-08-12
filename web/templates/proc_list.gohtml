@@ -25,8 +25,8 @@
                     type="button"
                     class="border border-black px-4 py-2 focus:outline:none focus:ring-4 focus:ring-aqua-400"
                     x-ref="button"
-                    :aria-expanded="open"
-                    :aria-controls="$id('dropdown-button')"
+                    x-bind:aria-expanded="open"
+                    x-bind:aria-controls="$id('dropdown-button')"
                     @click="toggle()"
                     >
                     <span class="">TERMINATE</span>
@@ -36,7 +36,7 @@
                 <!-- panel -->
                 <div
                     class="absolute left-0 mt-2 bg-white border border-black display-none z-50"
-                    :id="$id('dropdown-button')"
+                    x-bind:id="$id('dropdown-button')"
                     x-ref="panel"
                     x-show="open"
                     x-cloak
