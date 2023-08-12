@@ -18,13 +18,18 @@ serve-detached: all
 	./go-htmx &
 
 
-watch: watch-watchman
+watch: watch-entr
 
 watch-air:
 	air
 
 watch-entr:
-	find ./ static templates -not -path "./.git/*" -type f | entr -r make serve
+	cat Makefile | entr -r make watch-entr-impl
+
+watch-entr-impl:
+	while sleep 1; do find . -type f \
+		-name "*.go" -o -name "*.js" -o -name "*.css" -o -name "*.gohtml" -o -name "*.html" \
+		! -path "./.git/*" ! -path "./web/static/css/style.css" | entr -r -d make serve; done
 
 watch-watchman:
 	watchman-make -p 'Makefile' '**/*.go' 'web/**/*' '*.js' '*.json' -t serve-detached
