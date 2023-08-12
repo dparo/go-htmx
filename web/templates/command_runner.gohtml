@@ -4,7 +4,8 @@
 
     <div class="relative mb-4 flex flex-wrap items-stretch">
         <span
-            class="flex items-center whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-3 py-[0.25rem] text-center text-base font-normal leading-[1.6] text-neutral-700 dark:border-neutral-600 dark:text-neutral-600 dark:placeholder:text-neutral-600" >
+            class="flex items-center whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-3 py-[0.25rem] text-center text-base font-normal leading-[1.6] text-neutral-700 dark:border-neutral-600 dark:text-neutral-600 dark:placeholder:text-neutral-600"
+            >
             #
         </span>
         <input id="cmdTextArea"
@@ -16,7 +17,7 @@
             hx-trigger="keydown[key == 'Enter']"
             hx-swap="innerHTML" hx-target="next div" hx-post="/api/cmd" hx-vals='js:{cmd: document.getElementById("cmdTextArea").value}'
         >
-        <button class="btn" type="button"
+        <button class="btn w-20" type="button"
             x-data="{enabled: true}"
             hx-trigger="click"
             hx-swap="innerHTML"
@@ -26,8 +27,8 @@
             x-on:click='enabled = false'
             x-bind:disabled="enabled ? false : true"
             x-on:htmx:after-request="enabled = true"
+            x-text="enabled ? 'RUN' : '...'"
             >
-            RUN
         </button>
     </div>
 
