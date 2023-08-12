@@ -1,24 +1,58 @@
 {{ $cmds := .Cmds }}
 {{ $signals := .Signals }}
 
-<ul class="list-disc dark:text-white" hx-get="/procs" hx-trigger="evProcListRefresh from:body" hx-swap="outerHTML">
+<ul class="list-disc" hx-get="/procs" hx-trigger="evProcListRefresh from:body" hx-swap="outerHTML">
     {{ range $cmd := .Cmds }}
-        <li id="li-{{ $cmd.Pid }}" class="py-1">
+        <li class="py-1">
 
-            <div class="btn-group">
-                {{ range $index, $signal := $signals }}
-                    {{ if eq $index 0 }}
-                        <button class="btn btn-secondary btn-sm" type="button" hx-delete="/api/pid/{{ $cmd.Pid }}?signal={{ $signal }}" hx-swap="outerHTML" hx-target="#li-{{ $cmd.Pid }}">
-                            {{ $signal }}
-                        </button>
-                        <button type="button" class="btn btn-sm btn-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-                            <span class="visually-hidden">Toggle Dropdown</span>
-                        </button>
-                    {{ end }}
-                {{ end }}
-                <ul class="dropdown-menu">
+            <div
+                class="relative"
+                @keydown.escape.prevent.stop="close($refs.button)"
+                @focusin.window="! $refs.panel.contains($event.target) && close()"
+                x-id="['dropdown-button']"
+                x-data="{
+                    open: false,
+                    close(focusAfter) {
+                        this.open = false
+                        focusAfter && focusAfter.focus()
+                    },
+                    toggle() {
+                        this.open = !this.open;
+                    },
+                }"
+                >
+                <button
+                    type="button"
+                    class="border border-black px-4 py-2 focus:outline:none focus:ring-4 focus:ring-aqua-400"
+                    x-ref="button"
+                    :aria-expanded="open"
+                    :aria-controls="$id('dropdown-button')"
+                    @click="toggle()"
+                    >
+                    <span class="">TERMINATE</span>
+                    <span aria-hidden="true">&darr;</span>
+                </button>
+
+                <!-- panel -->
+                <div
+                    class="absolute left-0 mt-2 bg-white border border-black display-none z-50"
+                    :id="$id('dropdown-button')"
+                    x-ref="panel"
+                    x-show="open"
+                    x-cloak
+                    @click.outside="close($refs.button)"
+                    >
                     {{ range $index, $signal := $signals }}
-                        <li><a href="#" class="dropdown-item" hx-delete="/api/pid/{{ $cmd.Pid }}?signal={{ $signal }}" hx-swap="outerHTML" hx-target="#li-{{ $cmd.Pid }}">{{ $signal }}</a></li>
+                        <a
+                            href="#"
+                            class="block w-full px-4 py-2 text-left text-sm hover:bg-gray-100 focus:outline-none focus-ring focus-ring-aqua-400 disabled"
+                            hx-delete="/api/pid/{{ $cmd.Pid }}?signal={{ $signal }}"
+                            hx-swap="outerHTML"
+                            hx-target="#li-{{ $cmd.Pid }}"
+                            @click="close()"
+                            >
+                            {{ $signal }}
+                        </a>
                     {{ end }}
                 </ul>
             </div>
