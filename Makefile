@@ -24,9 +24,10 @@ watch-air:
 	air
 
 watch-entr:
-	while true; do find . -type f \
+	while true; do echo "Running watch loop"; find . -type f \
 			-name "Makefile" -o -name "*.go" -o -name "*.js" -o -name "*.css" -o -name "*.gohtml" -o -name "*.html" \
-			! -path "./.git/*" ! -path "./web/static/css/style.css" | entr -r -d make serve; sleep 0.5; done
+			! -path "./.git/*" ! -path "./web/static/css/style.css" ! -path "node_modules/*" \
+			| entr -r -d make serve && break; sleep 0.5; done
 
 
 watch-watchman:
