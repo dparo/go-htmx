@@ -4,13 +4,29 @@
 <ul class="list-disc dark:text-white" hx-get="/procs" hx-trigger="evProcListRefresh from:body" hx-swap="outerHTML">
     {{ range $cmd := .Cmds }}
         <li id="li-{{ $cmd.Pid }}" class="py-1">
-            {{ range $signal := $signals }}
-            <button hx-delete="/api/pid/{{ $cmd.Pid }}?signal={{ $signal }}" hx-swap="outerHTML" hx-target="closest li"
-                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded mx-1">{{ $signal }}</button>
-            {{ end }}
-            <p class="inline-block break-all">
-            {{ $cmd.Pid }} - {{ $cmd.Argv }}
-            </p>
+
+            <SplitButton default="SIGTERM" vals=["SIGTERM", "SIGINT", "SIGKILL"] />
+            <div class="btn-group">
+                {{ range $index, $signal := $signals }}
+                    {{ if eq $index 0 }}
+                        <button class="btn btn-secondary btn-sm" type="button" hx-delete="/api/pid/{{ $cmd.Pid }}?signal={{ $signal }}" hx-swap="outerHTML" hx-target="#li-{{ $cmd.Pid }}">
+                            {{ $signal }}
+                        </button>
+                        <button type="button" class="btn btn-sm btn-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="visually-hidden">Toggle Dropdown</span>
+                        </button>
+                    {{ end }}
+                {{ end }}
+                <ul class="dropdown-menu">
+                    {{ range $index, $signal := $signals }}
+                        <li><a href="#" class="dropdown-item" hx-delete="/api/pid/{{ $cmd.Pid }}?signal={{ $signal }}" hx-swap="outerHTML" hx-target="#li-{{ $cmd.Pid }}">{{ $signal }}</a></li>
+                    {{ end }}
+                </ul>
+            </div>
+
+            <span class="text-wrap align-middle pl-1">
+                {{ $cmd.Pid }} - {{ $cmd.Argv }}
+            </span>
         </li>
     {{ end }}
 </ul>

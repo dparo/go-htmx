@@ -1,11 +1,18 @@
 <div id="cmdRunnerBlock">
-    <div class="flex">
-    <textarea wrap="off" id="cmdTextArea" rows="1" class="resize-none block p-2.5 w-full font-mono text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write the bash command here..."></textarea>
-    <button hx-swap="innerHTML" hx-target="#processCreatedMsg" hx-post="/api/cmd" hx-trigger="click" hx-vals='js:{cmd: document.getElementById("cmdTextArea").value}'
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        RUN
-    </button>
+
+    <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon1">#</span>
+        <input id="cmdTextArea" type="text" class="form-control" placeholder="Write a bash command here..." aria-label="Recipient's username" aria-describedby="button-addon2"
+            hx-trigger="keydown[key == 'Enter']"
+            hx-swap="innerHTML" hx-target="#processCreatedMsg" hx-post="/api/cmd" hx-vals='js:{cmd: document.getElementById("cmdTextArea").value}'
+        >
+        <button class="btn  btn-primary" type="button"
+            hx-trigger="click"
+            hx-swap="innerHTML" hx-target="#processCreatedMsg" hx-post="/api/cmd" hx-vals='js:{cmd: document.getElementById("cmdTextArea").value}'>
+            RUN
+        </button>
     </div>
+
 
     <div id="processCreatedMsg">
     </div>
