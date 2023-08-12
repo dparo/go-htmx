@@ -5,7 +5,6 @@
     {{ range $cmd := .Cmds }}
         <li id="li-{{ $cmd.Pid }}" class="py-1">
 
-            <SplitButton default="SIGTERM" vals=["SIGTERM", "SIGINT", "SIGKILL"] />
             <div class="btn-group">
                 {{ range $index, $signal := $signals }}
                     {{ if eq $index 0 }}
