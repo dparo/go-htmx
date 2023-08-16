@@ -8,7 +8,10 @@ install-deps:
 	go install github.com/cosmtrek/air@latest
 
 tailwind:
-	tailwindcss -i ./web/templates/input.css -o ./web/static/css/style.css
+	tailwindcss -m -i ./web/templates/input.css -o ./web/static/css/style.css
+
+tailwind-watch:
+	tailwindcss --watch -m -i ./web/templates/input.css -o ./web/static/css/style.css
 
 serve: all
 	./go-htmx
