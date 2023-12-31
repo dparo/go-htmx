@@ -14,8 +14,6 @@
             placeholder="Write a bash command here..."
             aria-label="Recipient's username"
             aria-describedby="button-addon2"
-            hx-trigger="keydown[key == 'Enter']"
-            hx-swap="innerHTML" hx-target="next div" hx-post="/api/cmd" hx-vals='js:{cmd: document.getElementById("cmdTextArea").value}'
         >
 
         <button type="button"
